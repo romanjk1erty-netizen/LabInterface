@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бот для изучения языков - Интерфейс</title>
+    <!-- Подключаем Telegram Web App SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            box-sizing: border-box;
+            -webkit-user-select: none; /* Отключение выделения текста для лучшего UX */
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        header {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eeeeee;
+            padding-bottom: 20px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #34495e;
+            font-size: 1.5em;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        .button-group {
+            margin-top: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 14px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.back-button {
+            background-color: #6c757d;
+            margin-top: 20px;
+        }
+
+        button.back-button:hover {
+            background-color: #5a6268;
+        }
+
+        .main-image {
+            width: 80%;
+            max-width: 250px;
+            height: auto;
+            margin-top: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .profile-info p, .quiz-area p {
+            text-align: left;
+            margin-bottom: 10px;
+            color: #34495e;
+        }
+
+        .profile-info strong {
+            color: #2c3e50;
+        }
+
+        .quiz-area {
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .answer-input {
+            width: calc(100% - 20px);
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        .feedback {
+            font-weight: bold;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .feedback.correct {
+            color: #28a745;
+        }
+
+        .feedback.incorrect {
+            color: #dc3545;
+        }
+
+        .screen {
+            display: none;
+        }
+        .screen.active {
+            display: block;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="https://via.placeholder.com/80x80?text=🌐" alt="Логотип бота" class="logo">
+            <h1>Бот для изучения языков</h1>
+            <p>Ваш личный помощник в освоении новых языков!</p>
+        </header>
+
+        <!-- Главное меню (в Web App это может быть не нужно, если вы сразу открываете нужный экран) -->
+        <section id="main-menu" class="screen active">
+            <h2>Главное меню Web App</h2>
+            <p>Добро пожаловать в Web App! Здесь вы можете настроить свой профиль.</p>
+            <div class="button-group">
+                <button onclick="showScreen('language-select-menu')">Изменить изучаемый язык</button>
+                <button onclick="showScreen('difficulty-select-menu')">Изменить уровень сложности</button>
+                <button onclick="closeWebApp()">Закрыть Web App</button>
+            </div>
+            <img src="https://via.placeholder.com/300x200?text=Web+App+Ready" alt="Изображение для Web App" class="main-image">
+        </section>
+
+        <!-- Меню выбора языка -->
+        <section id="language-select-menu" class="screen">
+            <h2>Выберите язык</h2>
+            <div class="button-group">
+                <button onclick="sendLanguage('Русский')">🇷🇺 Русский</button>
+                <button onclick="sendLanguage('Английский')">🇬🇧 Английский</button>
+                <button onclick="sendLanguage('Испанский')">🇪🇸 Испанский</button>
+                <button onclick="sendLanguage('Французский')">🇫🇷 Французский</button>
+                <button onclick="sendLanguage('Немецкий')">🇩🇪 Немецкий</button>
+            </div>
+            <button onclick="showScreen('main-menu')" class="back-button">◀️ Назад</button>
+        </section>
+
+        <!-- Меню выбора уровня сложности -->
+        <section id="difficulty-select-menu" class="screen">
+            <h2>Выберите уровень сложности</h2>
+            <div class="button-group">
+                <button onclick="sendDifficulty('Начинающий')">⭐ Начинающий</button>
+                <button onclick="sendDifficulty('Средний')">⭐⭐ Средний</button>
+                <button onclick="sendDifficulty('Продвинутый')">⭐⭐⭐ Продвинутый</button>
+            </div>
+            <button onclick="showScreen('main-menu')" class="back-button">◀️ Назад</button>
+        </section>
+
+    </div>
+
+    <script>
+        // Инициализация Web App
+        // Telegram.WebApp.ready() должен вызываться после загрузки SDK
+        if (window.Telegram && window.Telegram.WebApp) {
+            Telegram.WebApp.ready();
+            // Пример: показать кнопку "Закрыть" от Telegram, если нужна
+            // Telegram.WebApp.MainButton.setText("Закрыть Web App").show().onClick(closeWebApp);
+        }
+
+        function showScreen(screenId) {
+            const screens = document.querySelectorAll('.screen');
+            screens.forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+
+            // Если Telegram MainButton активна, можно менять её текст или скрывать
+            if (window.Telegram && window.Telegram.WebApp && Telegram.WebApp.MainButton.isVisible) {
+                // Telegram.WebApp.MainButton.hide(); // Можно скрыть, если на экране свои кнопки
+            }
+        }
+
+        function sendLanguage(languageName) {
+            if (window.Telegram && window.Telegram.WebApp) {
+                // Отправляем данные боту в формате JSON
+                Telegram.WebApp.sendData(JSON.stringify({ type: 'set_language', value: languageName }));
+                Telegram.WebApp.close(); // Закрываем Web App после отправки
+            } else {
+                alert(`Выбран язык: ${languageName} (нет Telegram Web App API)`);
+                showScreen('main-menu');
+            }
+        }
+
+        function sendDifficulty(difficultyName) {
+            if (window.Telegram && window.Telegram.WebApp) {
+                // Отправляем данные боту в формате JSON
+                Telegram.WebApp.sendData(JSON.stringify({ type: 'set_difficulty', value: difficultyName }));
+                Telegram.WebApp.close(); // Закрываем Web App после отправки
+            } else {
+                alert(`Выбран уровень: ${difficultyName} (нет Telegram Web App API)`);
+                showScreen('main-menu');
+            }
+        }
+
+        function closeWebApp() {
+            if (window.Telegram && window.Telegram.WebApp) {
+                Telegram.WebApp.close();
+            } else {
+                alert("Нет Telegram Web App API для закрытия.");
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showScreen('main-menu'); // Показываем главное меню Web App
+        });
+
+    </script>
+</body>
+</html>
